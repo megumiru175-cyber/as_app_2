@@ -1,45 +1,26 @@
 # app.py
 import streamlit as st
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+import requests
+from bs4 import BeautifulSoup
 import pandas as pd
-import time
-from datetime import datetime
 
-st.title("eBay スクレイピング結果")
+st.title("eBay スクレイピング")
 
-@st.cache_data
-def get_ebay_items():
-    chrome_path = r"C:\Users\megumiru.user175\Documents\chromedriver.exe"  # 適宜変更
-    service = Service(executable_path=chrome_path)
+url = "https://www.ebay.com/sch/i.html?item=406073602599"
+res = requests.get(url)
+soup = BeautifulSoup(res.text, "html.parser")
 
-    options = webdriver.ChromeOptions()
-    options.add_argument("--headless")
-    driver = webdriver.Chrome(service=service, options=options)
+items = soup.select(".s-item")
+results = []
 
-    base_url = "https://www.ebay.com/sch/i.html?item=406073602599&rt=nc&_trksid=p4429486.m3561.l161211&_ssn=japantube"
-    driver.get(base_url)
+for item in items:
+    title = item.select_one(".s-item__title")
+    price = item.select_one(".s-item__price")
+    if title and price:
+        results.append([title.text, price.text])
 
-    results = []
-    page = 1
-
-    while True:
-        try:
-            WebDriverWait(driver, 10).until(
-                EC.presence_of_all_elements_located((By.CSS_SELECTOR, ".s-item"))
-            )
-            items = driver.find_elements(By.CSS_SELECTOR, ".s-item")
-
-            for item in items:
-                try:
-                    title = item.find_element(By.CSS_SELECTOR, ".s-item__title").text.strip()
-                    if title.lower() in ["new listing", ""]:
-                        continue
-
-                    price = item.find_element(By.CSS_SELECTOR, ".s-item__price").text.strip()
+df = pd.DataFrame(results, columns=["Title", "Price"])
+st.dataframe(df)
 
                     try:
                         sold = "Sold" in item.find_element(By.CSS_SELECTOR, ".s-item__title--tagblock").text
@@ -87,3 +68,4 @@ if st.button("スクレイピング開始"):
     # Sold と Available の比率をグラフ表示
     st.subheader("Sold / Available の比率")
     st.bar_chart(df['Status'].value_counts())
+
