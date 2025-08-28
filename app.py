@@ -36,18 +36,4 @@ with col1:
         st.text(f'年齢層:{age_category}')
         st.text(f'趣味: {",".join(hobby)}')
 
-with col2:
 
-    df =pd.read_csv('data.csv')
-    st.line_chart(df)
-    st.bar_chart(df['2021年'])
-from  ebaysoldgazo import get_ebay_items
-
-
-app = Flask(__name__)
-
-@app.route('/')
-def index():
-    books =get_ebay_items()
-    return render_template('index.html',books=books)
-  
