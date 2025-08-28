@@ -11,6 +11,8 @@ import csv
 import time
 from datetime import datetime
 
+st.title("eBay スクレイピング結果")
+
 # === 環境設定 ===
 
 def get_ebay_items():
@@ -82,8 +84,25 @@ def get_ebay_items():
                 next_button.click()
                 page += 1
                 time.sleep(2)
-            except:
-                print("📘 最終ページに到達しました。")
+           except Exception as e:
+            st.error(f"スクレイピング中にエラー: {e}")
+            break
+
+    driver.quit()
+    return pd.DataFrame(results, columns=["Title", "Price", "Status", "Item URL", "Image URL"])
+
+# ボタンでスクレイピング開始
+if st.button("スクレイピング開始"):
+    df = get_ebay_items()
+    st.success(f"{len(df)} 件のデータを取得しました！")
+
+    st.subheader("データ表示")
+    st.dataframe(df)
+
+    # Sold と Available の比率をグラフ表示
+    st.subheader("Sold / Available の比率")
+    st.bar_chart(df['Status'].value_counts()) except:
+                print("結果が出ました")
                 break
 
         except Exception as e:
