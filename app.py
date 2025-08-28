@@ -40,8 +40,7 @@ with col2:
 
     df =pd.read_csv('data.csv')
     st.line_chart(df)
-    st.bar_chart(df['2021年'])from flask import 
-    Flask,render_template
+    st.bar_chart(df['2021年'])
 from  ebaysoldgazo import get_ebay_items
 
 
