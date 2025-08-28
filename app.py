@@ -8,4 +8,4 @@ app = Flask(__name__)
 def index():
     books =get_ebay_items()
     return render_template('index.html',books=books)
-    if  __name__ == '__main__':
+  
