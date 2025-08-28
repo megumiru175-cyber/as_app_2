@@ -1,11 +1,9 @@
-# app.py
-# app.py
 import streamlit as st
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 
-st.title("eBay 商品スクレイピング＆分析")
+st.title("eBay 商品スクレイピング_分析")
 
 # スクレイピング対象URL
 url = "https://www.ebay.com/sch/i.html?item=406073602599"
@@ -41,6 +39,7 @@ if st.button("スクレイピング開始"):
         st.bar_chart(df['Status'].value_counts())
     else:
         st.warning("データが取得できませんでした。")
+
 
 
 
