@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <title>e-bay商品一覧</title>
+    <body>
+            <table border="1">
+                <tr>
+                    <th>Title</th>
+                    <th>Price</th>
+                    <th>Status</th>
+                </tr>
+                {% for book in books %}
+                <tr>
+                    <td>{{ book['Title']}}</td>
+                    <td>{{ book['Price']}}</td>
+                    <td>{{ book['Status'] }}</td>
+                    <td><a href="{{book['Item URL']}}" target="_blank">商品ページ</a> </td>
+                    <td>
+                        {% if book['Image ']}
+                </tr>
+                {% for row in books %}
+                <tr>
+                    {% for value in row.values() %}
+                    <td>{{value}}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </table>
+    </body>
+    </head>
