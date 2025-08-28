@@ -22,7 +22,7 @@ for item in items:
 df = pd.DataFrame(results, columns=["Title", "Price"])
 st.dataframe(df)
 
-                    try:
+                try:
                         sold = "Sold" in item.find_element(By.CSS_SELECTOR, ".s-item__title--tagblock").text
                     except:
                         sold = False
@@ -68,4 +68,5 @@ if st.button("スクレイピング開始"):
     # Sold と Available の比率をグラフ表示
     st.subheader("Sold / Available の比率")
     st.bar_chart(df['Status'].value_counts())
+
 
