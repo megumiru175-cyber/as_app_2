@@ -9,4 +9,3 @@ def index():
     books =get_ebay_items()
     return render_template('index.html',books=books)
 if  __name__ == '__main__':
-    app.run(debug=True)
