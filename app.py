@@ -1,4 +1,7 @@
 import streamlit as st
+import pandas as pd
+from  ebaysoldgazo import get_ebay_items
+import streamlit as st
 import os
 import pandas as pd
 
@@ -35,5 +38,7 @@ with col1:
         st.text(f'ようこそ！{name}さん！{address}なんですね！！')
         st.text(f'年齢層:{age_category}')
         st.text(f'趣味: {",".join(hobby)}')
-
+with col2:
+    st.subheader('アプリ実行')
+    st.text('これはアプリ実行ページです。')
 
