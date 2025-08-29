@@ -6,7 +6,7 @@ import pandas as pd
 st.title("eBay 商品スクレイピング_分析")
 
 # スクレイピング対象URL
-url = "https://www.ebay.com/sch/i.html?item=406073602599"
+url = "https://www.ebay.com/sch/i.html?item=406073602599&rt=nc&_trksid=p4429486.m3561.l161211&_ssn=japantube"
 
 # ボタンでスクレイピング開始
 if st.button("スクレイピング開始"):
@@ -39,6 +39,7 @@ if st.button("スクレイピング開始"):
         st.bar_chart(df['Status'].value_counts())
     else:
         st.warning("データが取得できませんでした。")
+
 
 
 
