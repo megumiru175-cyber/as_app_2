@@ -13,6 +13,7 @@ if submit_button:
         st.warning("URLを入力してください")
     else:
         try:
+            headers = {"User-Agent": "Mozilla/5.0"}
             res = requests.get(url_input)
             soup = BeautifulSoup(res.text,"html.parser")
             
@@ -39,11 +40,11 @@ if submit_button:
                 st.dataframe(df)
 
                 st.subheader("Sold / Availble の比率")
-                st.bar_chart(df['status'].value_counts())
+                st.bar_chart(df['Status'].value_counts())
             else:
-                st:Warning("データが取得できませんでした。") # type: ignore
+                st:warning("データが取得できませんでした。") # type: ignore
         except Exception as e:
             st.error(f"動作途中でエラーが発生しました。")
-            
+
 
 
