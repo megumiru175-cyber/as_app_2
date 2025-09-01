@@ -43,7 +43,7 @@ if password_input == PASSWORD:
                     "Chrome/139.0.0.0 Safari/537.36"
     }
 
-                res = requests.get(url_input)
+                res = requests.get(url_input,headers=headers)
                 soup = BeautifulSoup(res.text,"html.parser")
                 
         
@@ -83,6 +83,7 @@ if password_input == PASSWORD:
 
 elif password_input != "":
     st.error("❌ パスワードが違います")
+
 
 
 
