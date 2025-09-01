@@ -71,7 +71,7 @@ if password_input == PASSWORD:
                     st.subheader("Sold / Availble の比率")
                     st.bar_chart(df['Status'].value_counts())
                 else:
-                    st:warning("データが取得できませんでした。") # type: ignore
+                    st.warning("データが取得できませんでした。") # type: ignore
             except Exception as e:
                 st.error(f"動作途中でエラーが発生しました。")
 
@@ -83,6 +83,7 @@ if password_input == PASSWORD:
 
 elif password_input != "":
     st.error("❌ パスワードが違います")
+
 
 
 
