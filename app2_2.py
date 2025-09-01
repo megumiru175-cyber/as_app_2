@@ -47,7 +47,7 @@ if password_input == PASSWORD:
                 soup = BeautifulSoup(res.text,"html.parser")
                 
         
-                items = soup(".s-item")
+                items = soup.select(".s-item")
                 results = []
 
                 for item in items:
@@ -58,7 +58,7 @@ if password_input == PASSWORD:
                     if title_el and price_el:
                         title = title_el.text.strip()
                         price = price_el.text.strip()
-                        sold = "Sold" if sold_el and "Sold" in sold_el.text else "Availble"
+                        sold = "Sold" if sold_el and "Sold" in sold_el.text else "Available"
                         results.append([title,price,sold])
                 if results:
                     df = pd.DataFrame(results,columns=["Title","Price","Status"])
@@ -83,6 +83,7 @@ if password_input == PASSWORD:
 
 elif password_input != "":
     st.error("❌ パスワードが違います")
+
 
 
 
