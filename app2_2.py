@@ -32,7 +32,8 @@ if password_input == PASSWORD:
     url = st.text_input("取得したいURLを入力")
     if st.button("取得開始") and url:
         with sync_playwright() as p:
-            browser = p.chromium.launch(headless=True)
+            browser = p.chromium.launch(headless=True,args=["--no-sandbox", "--disable-dev-shm-usage"]
+)
             page = browser.new_page()
             page.goto(url)
             page.wait_for_selector(".s-item")
@@ -66,6 +67,7 @@ if password_input == PASSWORD:
 
 elif password_input != "":
     st.error("❌ パスワードが違います")
+
 
 
 
