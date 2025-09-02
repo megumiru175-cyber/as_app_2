@@ -20,66 +20,62 @@ password_input = st.text_input("パスワードを入力してください", typ
 # -------------------------
 if password_input == PASSWORD:
     st.success("✅ ログイン成功！")
-    
+
     # ここからアプリ本体の内容
     st.write("スクレイピングアプリ")
-    import streamlit as st
     import requests
     from bs4 import BeautifulSoup
     import pandas as pd
-    import json
-    import re
-    
-    st.title("eBay 簡易スクレイピング（Cloud対応）")
-    
-    # 入力フォーム
-    url = st.text_input("取得したい eBay 検索URL")
-    
-    if st.button("取得開始") and url:
-        try:
-            headers = {"User-Agent": "Mozilla/5.0"}
-            res = requests.get(url, headers=headers)
-            soup = BeautifulSoup(res.text, "html.parser")
-    
-            # JSON を含む <script> タグを検索
-            script_tags = soup.find_all("script")
-            json_text = None
-            for script in script_tags:
-                if "window.__INITIAL_STATE__" in script.text:
-                    match = re.search(r"window\.__INITIAL_STATE__\s*=\s*({.*});", script.text)
-                    if match:
-                        json_text = match.group(1)
-                        break
-    
-            if not json_text:
-                st.warning("JSONが見つかりませんでした。")
-            else:
-                data = json.loads(json_text)
-    
-                # 商品情報を抽出（ページ構造に応じてキーを変更）
-                items = []
-                for item in data.get("searchResults", {}).get("items", []):
-                    items.append({
-                        "Title": item.get("title"),
-                        "Price": item.get("price", {}).get("value"),
-                        "Status": "Sold" if item.get("isSold") else "Available"
-                    })
-    
-                if items:
-                    df = pd.DataFrame(items)
-                    st.subheader("取得結果")
+    st.title("商品分析_スクレイピング")
+
+    with st.form(key="url_form"):
+        url_input = st.text_input("取得したいURLを入力してください。")
+        submit_button = st.form_submit_button(label="取得開始")
+
+    if submit_button:
+        if not url_input:
+            st.warning("URLを入力してください")
+        else:
+            try:
+                headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                    "AppleWebKit/537.36 (KHTML, like Gecko) "
+                    "Chrome/139.0.0.0 Safari/537.36"
+    }
+
+                res = requests.get(url_input,headers=headers)
+                soup = BeautifulSoup(res.text,"html.parser")
+
+
+                items = soup(".s-item")
+                items = soup.select(".s-item")
+                results = []
+
+                for item in items:
+                    title_el = item.select_one(".s-item__title")
+                    price_el = item.select_one(".s-item__price")
+                    sold_el = item.select_one(".s-item__title--tagblock")
+
+                    if title_el and price_el:
+                        title = title_el.text.strip()
+                        price = price_el.text.strip()
+                        sold = "Sold" if sold_el and "Sold" in sold_el.text else "Availble"
+                        sold = "Sold" if sold_el and "Sold" in sold_el.text else "Available"
+                        results.append([title,price,sold])
+                if results:
+                    df = pd.DataFrame(results,columns=["Title","Price","Status"])
+                    df.index +=1
+
+                    st.success(f"{len(df)}件のデータを取得しました。")
+                    st.subheader("データ表示")
                     st.dataframe(df)
-                    st.subheader("Sold / Available 比率")
+
+                    st.subheader("Sold / Availble の比率")
                     st.bar_chart(df['Status'].value_counts())
                 else:
-                    st.warning("商品情報が見つかりませんでした。")
-    
-        except Exception as e:
-            st.error(f"取得中にエラーが発生しました: {e}")
-    
-    
-    elif password_input != "":
-        st.error("❌ パスワードが違います")
+                    st.warning("データが取得できませんでした。") # type: ignore
+            except Exception as e:
+                st.error(f"動作途中でエラーが発生しました。")
 
 
 
@@ -87,9 +83,5 @@ if password_input == PASSWORD:
 
 
 
-
-
-
-
-
-
+elif password_input != "":
+    st.error("❌ パスワードが違います")
