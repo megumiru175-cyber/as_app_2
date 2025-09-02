@@ -45,7 +45,7 @@ if password_input == PASSWORD:
 
                 res = requests.get(url_input,headers=headers)
                 soup = BeautifulSoup(res.text,"html.parser")
-                
+                st.code(res.text[:1000])  
         
                 items = soup.select(".s-item")
                 results = []
@@ -83,6 +83,7 @@ if password_input == PASSWORD:
 
 elif password_input != "":
     st.error("❌ パスワードが違います")
+
 
 
 
